@@ -45,16 +45,18 @@ module NextInstructionCalculator(
 
     /* You'll want to assign these items to more sensible values */
 
-    assign signExtended_shifted_immediate = 32'd0;
+    assign signExtended_shifted_immediate = {14{Instruction[15]},Instruction[15:0],2'b00};
 
      /* This one is actually correct. */
     assign jumpDestination_immediate = {Instr_PC_Plus4[31:28],Instruction[25:0],2'b00};
     
     /* but that was the only one. */
-    assign branchDestination_immediate = 32'd0;
+    assign branchDestination_immediate = Instr_PC_Plus4 + signExtended_shifted_immediate;
      
     /* This is wrong; the assignments are here to avoid "Signal is not used" compile warnings. */
-    assign NextInstructionAddress = signExtended_shifted_immediate+jumpDestination_immediate+branchDestination_immediate;
+    //assign NextInstructionAddress = signExtended_shifted_immediate+jumpDestination_immediate+branchDestination_immediate;
+    assign jumpAddress = JumpRegister ? RegisterValue : jumpDestination_immediate; 
+    assign NextInstructionAddress =  Jump ? jumpAddree : branchDestination_immediate;
 
 always @(Jump or JumpRegister or RegisterValue or Instr_PC_Plus4 or Instruction) begin
 	if(Jump) begin
