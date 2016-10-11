@@ -105,21 +105,57 @@ always @(data_read_fDM) begin
 	MemWriteAddress = ALU_result;
 	case(ALU_Control)
 		6'b101101: begin
+		case(ALU_result[1:0])
+			2'b00:data_read_aligned = data_read_fDM;
+			2'b01:data_read_aligned = {data_read_fDM[23:0],MemoryData1[7:0]};
+			2'b10:data_read_aligned = {data_read_fDM[15:0],MemoryData1[15:0]};
+			2'b11:data_read_aligned = {data_read_fDM[7:0],MemoryData1[23:0]};
+		endcase
             //TODO:LWL
 		end
 		6'b101110: begin
+		case(ALU_result[1:0])
+			2'b00:data_read_aligned = {Memorydata1[31:8],data_read_fDM[31:24]};
+			2'b01:data_read_aligned = {MemoryData1[31:16],data_read_fDM[31:16]};
+			2'b10:data_read_aligned = {MemoryData1[31:24],data_read_fDM[31:8]};
+			2'b11:data_read_aligned = data_read_fDM;
+		endcase
             //TODO:LWR
 		end
 		6'b100001: begin
+		case(ALU_result[1:0])
+			2'b00:data_read_aligned = {24{data_read_fDM[31]},data_read_fDM[31:24]};
+			2'b01:data_read_aligned = {24{data_read_fDM[23]},data_read_fDM[23:16]};
+			2'b10:data_read_aligned = {24{data_read_fDM[15]},data_read_fDM[15:8]};
+			2'b11:data_read_aligned = {24{data_read_fDM[7]},data_read_fDM[7:0]};
+		endcase
+		data_write_size_2DM = 0;
             //TODO:LB
 		end
 		6'b101011: begin
+		case(ALU_result[1:0])
+			2'b00:data_read_aligned = {16{data_read_fDM[31]},data_read_fDM[31:16]};
+			2'b10:data_read_aligned = {16{data_read_fDM[15]},data_read_fDM[15:0]};
+		endcase
+		data_write_size_2DM = 0;	
             //TODO:LH
 		end
 		6'b101010: begin
+		case(ALU_result[1:0])
+			2'b00:data_read_aligned = {24'b0,data_read_fDM[31:24]};
+			2'b01:data_read_aligned = {24'b0,data_read_fDM[23:16]};
+			2'b10:data_read_aligned = {24'b0,data_read_fDM[15:8]};
+			2'b11:data_read_aligned = {24'b0,data_read_fDM[7:0]};
+		endcase
+		data_write_size_2DM = 0;
             //TODO:LBU
 		end
 		6'b101100: begin
+		case(ALU_result[1:0])
+			2'b00:data_read_aligned = {16'b0,data_read_fDM[31:16]};
+			2'b10:data_read_aligned = {16'b0,data_read_fDM[15:0]};
+		endcase
+		data_write_size_2DM = 0;
             //TODO:LHU
 		end
 		6'b111101, 6'b101000, 6'd0, 6'b110101: begin	//LW, LL, NOP, LWC1
