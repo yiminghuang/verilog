@@ -164,13 +164,13 @@ always @(data_read_fDM) begin
 		end
 		6'b101111: begin	//SB
 			data_write_size_2DM=1;
-			data_write_2DM = {24b'0,MemoryData1[7:0]};
+			data_write_2DM = {24'b0,MemoryData1[7:0]};
             //TODO:SB
             //Set data_write_2DM appropriately
 		end
 		6'b110000: begin	//SH
 			data_write_size_2DM=2;
-			data_write_2DM = {16b'0,MemoryData1[15:0]};
+			data_write_2DM = {16'b0,MemoryData1[15:0]};
             //TODO:SH
             //Set data_write_2DM appropriately
 		end
